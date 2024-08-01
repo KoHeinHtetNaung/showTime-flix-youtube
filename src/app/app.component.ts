@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +6,19 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'showTime-youtube';
+  // title = 'showTime-youtube';
+
+  navbg: any;
+  @HostListener('document:scroll') scrollOver() {
+    console.log(document.body.scrollTop, 'scrollLength')
+
+    if (document.body.scrollTop > 0 || document.documentElement.scrollTop > 0) {
+      this.navbg = {
+        'background-color': '#000000'
+      }
+    } else {
+      this.navbg = {}
+    }
+  }
+
 }

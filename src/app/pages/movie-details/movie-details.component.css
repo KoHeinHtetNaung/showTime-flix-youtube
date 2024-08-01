@@ -1,0 +1,16 @@
+img {
+  width: 100%;
+  height: auto;
+}
+
+a {
+  background-color: #e50914;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+a:hover {
+  background-color: #e50914;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
