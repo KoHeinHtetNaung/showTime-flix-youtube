@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MovieApiServiceService } from '../../service/movie-api-service.service';
+
 
 
 @Component({
@@ -20,6 +21,17 @@ export class HomeComponent implements OnInit {
   scienceFictionMovieResult: any = [];
   thrillerMovieResult: any = [];
 
+  navbg:any;
+
+  @HostListener('document:scroll') scrollOver() {
+    if(document.body.scrollTop > 0 || document.documentElement.scrollTop > 0) {
+      this.navbg = {
+        'background-color' : '#000000'
+      }
+    }else {
+      this.navbg = {}
+    }
+  }
   ngOnInit(): void {
     this.bannerData();
     this.trendingData();

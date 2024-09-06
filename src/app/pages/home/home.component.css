@@ -44,3 +44,24 @@
 .rowPoster::-webkit-scrollbar {
   display: none;
 }
+
+.navbar .navbar-brand {
+  color: #e50914;
+  font-weight: bold;
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #e50914;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Ubuntu", sans-serif;
+  background-color: #000000 !important;
+  overflow-x: hidden;
+}

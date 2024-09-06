@@ -1,6 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, NgZone, OnInit } from '@angular/core';
+import { from, Observable } from 'rxjs';
+
+ import {
+  AngularFirestore, AngularFirestoreDocument
+ } from '@angular/fire/compat/firestore'
+ import { AngularFireAuth } from '@angular/fire/compat/auth';
+ import { Router } from '@angular/router';
+ import * as auth from 'firebase/auth'
+import { User } from './user';
+import { emit } from 'process';
 
 
 @Injectable({
@@ -10,7 +19,26 @@ export class MovieApiServiceService implements OnInit {
   baseUrl = 'https://api.themoviedb.org/3';
   apiKey = '19e6ed2e4211410983e6bebcbcb2a2d8';
 
-  constructor(private http: HttpClient) {}
+  userData: any;
+
+  constructor(
+    private http: HttpClient,
+    public afs: AngularFirestore,
+    public afAuth: AngularFireAuth,
+    public router: Router,
+    public ngZone: NgZone
+  ) {
+    // this.afAuth.authState.subscribe((user) => {
+    //   if(user) {
+    //     this.userData = user;
+    //     localStorage.setItem('user', JSON.stringify(this.userData))
+    //     JSON.parse(localStorage.getItem('user')!)
+    //   }else {
+    //     localStorage.setItem('user', 'null');
+    //     JSON.parse(localStorage.getItem('user')!)
+    //   }
+    // })
+  }
 
   ngOnInit(): void {}
 
@@ -104,5 +132,57 @@ export class MovieApiServiceService implements OnInit {
     return this.http.get(
       `${this.baseUrl}/discover/movie?api_key=${this.apiKey}&with_genres=53`
     );
+  }
+
+  SignIn(email:string, password: string) {
+    return this.afAuth
+    .signInWithEmailAndPassword(email, password)
+    .then(result => {
+      this.SetUserData(result.user);
+      this.afAuth.authState.subscribe(user => {
+        if(user) {
+          this.router.navigate(['home'])
+        }
+      })
+    })
+    .catch(err => {
+      window.alert(err.message)
+    })
+  }
+
+  SignUp(email:string, password: string) {
+    return this.afAuth
+    .createUserWithEmailAndPassword(email, password)
+    .then(result => {
+      this.SendVerificationMail()
+      this.SetUserData(result.user)
+    })
+    .catch(error => {
+      window.alert (error.message)
+    })
+  }
+
+  SendVerificationMail() {
+    return this.afAuth.currentUser
+    .then ((u: any) => u.sendEmailVerification())
+    .then ( () => {
+      this.router.navigate(['verify-email-address']);
+    })
+  }
+
+  SetUserData(user:any) {
+    const userRef : AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`)
+
+    const userData: User = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+    };
+
+    return userRef.set(userData, {
+      merge: true,
+    })
   }
 }

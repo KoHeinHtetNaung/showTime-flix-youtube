@@ -1,0 +1,31 @@
+<div class="full-screen-container">
+  <div class="login-container">
+    <h3 class="login-title">Welcome</h3>
+    <form>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" #userEmail required />
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" #usePassword required />
+      </div>
+      <button
+        type="button"
+        class="login-button"
+        (click)="authService.SignIn(userEmail.value, usePassword.value)"
+      >
+        Sign In
+      </button>
+
+      <p class="text-center mt-3 forgot" [routerLink]="['/forgot-password']">
+        Forgot password?
+      </p>
+
+      <p class="text-center mt-3">
+        Dont't have an account?
+        <a [routerLink]="['/register']" class="register"> SignUp</a>
+      </p>
+    </form>
+  </div>
+</div>

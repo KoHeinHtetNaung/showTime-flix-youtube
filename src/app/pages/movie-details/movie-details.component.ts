@@ -41,6 +41,7 @@ export class MovieDetailsComponent implements OnInit {
       result.results.forEach((element:any) => {
         if(element.type == 'Trailer') {
           this.getMovieVideoResult = element.key;
+          
         }
       });
       
